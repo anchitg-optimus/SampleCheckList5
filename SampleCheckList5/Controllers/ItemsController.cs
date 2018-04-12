@@ -26,11 +26,22 @@ namespace SampleCheckList5.Controllers
         public ActionResult Details(int? id)
         {
             Item item;
+            List<string> s = new List<string>();
             using (SqlConnection con = new SqlConnection("Data Source=OPTIMUS-216\\ENTERPRISE2017;Initial Catalog=Sprint2;User ID=sa;Password=qwerty"))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT [Items ID] FROM Items WHERE [Project ID]=" + id))
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Items WHERE [Project ID]=" + id))
                 {
                     cmd.Connection = con;
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    { 
+                        
+                        while(reader.Read())
+                        {
+                            s.Add(reader[2].ToString());
+                        }
+                    }
+                    /* cmd.Connection = con;
                     con.Open();
                     try
                     {
@@ -41,10 +52,10 @@ namespace SampleCheckList5.Controllers
                     catch(Exception e)
                     {
                        return HttpNotFound();
-                    }
+                    */
                 }
             }
-            if (id == null)
+           /* if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -52,8 +63,8 @@ namespace SampleCheckList5.Controllers
             if (item == null)
             {
                 return HttpNotFound();
-            }
-            return View(item);
+            }*/
+            return View(s);
         }
 
         // GET: Items/Create
